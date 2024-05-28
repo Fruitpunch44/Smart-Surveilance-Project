@@ -1,0 +1,16 @@
+
+path: C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\data\train
+train: C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\data\train\train\images
+val: C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\data\train\val\images
+
+#classes
+names:
+  0: Automatic Rifle
+  1: Bazooka
+  2: Grenade launcher
+  3: Handgun
+  4: Knife
+  5: SMG
+  6: Shotgun
+  7: Sniper
+  8: Sword
