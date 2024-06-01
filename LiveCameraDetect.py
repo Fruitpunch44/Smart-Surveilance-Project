@@ -16,14 +16,15 @@ from flask_socketio import SocketIO, emit
 import requests
 import numpy as np
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials
 from firebase_admin import db
 
+# important to use the REST API BY GOOGLE
 Firebase_api_key = 'AIzaSyCEL8kSwSyX4eIk6SeCQMtPGwCyzApvM2c'
 
 # authenticate flask
 app = Flask(__name__)
-socketio= SocketIO(app)
+socketio = SocketIO(app)
 # this is important to register users
 app.secret_key = 'ILIKEEGGS'
 
@@ -33,6 +34,7 @@ FIREBASE_SIGN_in = f'https://identitytoolkit.googleapis.com/v1/accounts:signInWi
 
 
 # Setting up protection function for routes
+# Only registered users can have access to the database collection logs and Live feed
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -57,38 +59,40 @@ def home():
     return render_template('index.html')
 
 
+# HTML page for the main video feed dashboard
 @app.route('/Video_page')
 @login_required
 def video_page():
     return render_template('Video.html')
 
 
-# main video page
+# redundant but just shows the camera feed without any dashboard/ui
 @app.route('/video_feed')
 @login_required
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-# Gets all the information from the fire base site in JSON format
+# Gets all the information from the fire base site in JSON format don't know if their another way will look into
+# making it into a tabular form
 @app.route('/data')
 @login_required
 def data():
     try:
         data = db_ref.get()
-        return jsonify(data)
+        return render_template('data.html', data=data)
     except Exception as e:
         return jsonify({"error": str(e)})
 
 
-# For user creation on firebase using auth.create
+# For user creation on firebase
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
-        # create new user
+        # create new user r
         payload = {
             'email': email,
             'password': password,
@@ -141,6 +145,7 @@ def login():
     return render_template('Login.html')
 
 
+# terminate current user session
 @app.route('/logout')
 @login_required
 def logout():
@@ -154,6 +159,7 @@ def logout():
 cred = credentials.Certificate("Credentials.json")
 
 # Live firebase database link
+# check this database cause shit doesn't exist no more
 firebase_admin.initialize_app(cred, {"databaseURL": "https://alarm-notification-94a3c-default-rtdb.firebaseio.com/"})
 
 # Initialize data reference
@@ -162,7 +168,7 @@ db_ref = db.reference()
 # pygame initialization alongside the audio play
 # defines the file path
 pygame.init()
-Audio_File_path = r"C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\data\machine-gun-01.wav"
+Audio_File_path = r"C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\data\Machine_gun.mp3"
 object_detected = False
 
 """ This section is just used to check how
@@ -170,12 +176,14 @@ much resources is being used and how i can optimize to
 get reduced cpu and memory consumption since this will be done in a raspberry pi"""
 
 
+# checks CPU usage
 def check_cpu_usage():
     cpu_usage = psutil.cpu_percent(interval=1)  # Get CPU usage for the last second
     if cpu_usage > 80:  # You can adjust this however you want
         print("warning: High CPU usage -", cpu_usage, "%")
 
 
+# checks Memory usage
 def check_memory_usage():
     memory_usage = psutil.virtual_memory().percent  # Get virtual memory usage percentage
     if memory_usage > 80:  # You can adjust the vlaue
@@ -202,7 +210,7 @@ def play_audio():
 with open(r'C:\Users\Olu-Ade\PycharmProjects\Yolo object detection\config.yaml', 'r') as file:
     class_labels = yaml.safe_load(file)
 
-# specify Labels and print them on the terminal for clarification
+# specify Labels and print them on the terminal for verification
 LABELS = [class_labels['names'][i] for i in range(len(class_labels['names']))]
 print(LABELS)
 
@@ -227,7 +235,7 @@ cap = cv2.VideoCapture(0)
 """Threshold score determines whether the desired object detected
  is similar to the one in the model
 """
-threshold = 0.7
+threshold = 0.5
 
 
 # Main Loop function
@@ -258,7 +266,7 @@ def generate_frames():
 
             # drawing of the bounding boxes and the class assignment
             if score > threshold:
-                socketio.emit('object_detected', {'message': f"{results.names[int(class_id)].upper()} detected!"})
+                socketio.emit('object_detected', {'message': "WEAPON DETECTED!"})
                 cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 4)
                 cv2.putText(frame, results.names[int(class_id)].upper(), (int(x1), int(y1 - 10)),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3, cv2.LINE_AA)
@@ -307,7 +315,8 @@ def generate_frames():
 
 # run the flask instance
 if __name__ == '__main__':
-    socketio.run(app,host='0.0.0.0', debug=True,allow_unsafe_werkzeug=True)  # Replace with your desired host if needed
+    socketio.run(app, host='0.0.0.0', debug=True,
+                 allow_unsafe_werkzeug=True)  # Replace with your desired host if needed
 
 # free up memory
 cap.release()

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            width: 30%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .login-form {
+            background: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .register{
+            text-align: center;
+        }
+
+        .register a{
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        
+        #login{
+            border: 0px solid black;
+            border-radius: 7px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-right: 70px;
+            padding-left: 70px;
+            background-color: #4CAF50;
+            cursor: pointer;
+            color: white;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+    </header>
+    <div class="container">
+        <form class="login-form" method="POST">
+            <h2>Please Login</h2>
+            <input type="email" name="email" placeholder="Email" required><br><br>
+            <input type="password" name="password" placeholder="Password" required><br><br>
+            
+            <div class="submit">
+                <input type="submit" id="login" value="Log in">
+            </div>
+        </form>
+    </div>
+
+    <div class="register">
+        <a href="/register" target="_blank">Don't have an account?</a>
+    </div>
+    <footer>
+        <p>&copy; Final year project</p>
+    </footer>
+</body>
+</html>

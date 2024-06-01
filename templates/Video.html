@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navigation ul {
+            margin: 5px;
+            list-style-type: none;
+            display: flex;
+            border-radius: 5px;
+            padding: 5px;
+            justify-content: space-between;
+        }
+        #message{
+            font-size: 60px;
+            color: red;
+        
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .video-feed {
+            border: 5px solid #ddd;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        #object-counts, #historical-data {
+            margin: 20px 0;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        function fetchHistoricalData() {
+            fetch('/historical_data')
+                .then(response => response.json())
+                .then(data => {
+                    const historicalDataDiv = document.getElementById('historical-data');
+                    historicalDataDiv.innerHTML = '<h2>Historical Data:</h2>';
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            const entry = data[key];
+                            historicalDataDiv.innerHTML += `<p>${entry.timestamp}: ${entry.object} detected at ${entry.Location}</p>`;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching historical data:', error));
+        }
+        setInterval(fetchHistoricalData, 5000); // Fetch historical data every 5 seconds
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('object_detected', function(data) {
+                var messageDiv = document.getElementById('message');
+                messageDiv.innerText = data.message;
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Live Object Detection Feed</h1>
+        <p>Detecting objects in real-time and pushing data to Firebase</p>
+        <div class="navigation">
+            <nav>
+                <ul>
+                    <li><a href="/logout" target="_blank">Logout</a></li>
+                    <li><a href="/" target="_blank">Home</a></li>
+                    <li><a href="/data" target="_blank">Data Logs</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Video Feed</h2>
+        <img src="http://127.0.0.1:5000/video_feed" class="video-feed" alt="Video Feed">
+        <p>Current detected object will be shown with bounding boxes in the video feed above while notification is shown below.</p>
+        <div id="message"></div>
+        <div id="historical-data"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Object Detection Project</p>
+    </footer>
+</body>
+</html>

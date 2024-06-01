@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+}
+
+#heading1{
+    color: white;
+    font-family:'Franklin Gothic Medium';
+    font-size:30px;
+    text-align: center;
+    padding: 30px;
+    background-color: #4CAF50;
+}
+
+.navigation ul{
+    margin: 15px;
+    list-style-type:none;
+    display: flex;
+    justify-content:space-evenly;
+    text-decoration: none;
+    border-radius: 25px;
+    padding: 34px;
+}
+
+ul li a{
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #fff;
+    border-radius: 23px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 10px;
+    padding-left: 10px;
+    background-color: #4CAF50;
+    cursor: pointer;
+    color: white;
+
+}
+
+h2{
+padding:10px;
+font-family: 'Franklin Gothic Medium';
+border-radius: 23px;
+margin: 10px;
+text-align: center;
+display: flex;
+background-color: #6dca70;
+color: white;
+}
+p{
+    text-align: left;
+    font-family:'Segoe UI';
+    font-size:2cap;
+    border-radius:25px ;
+    padding: 10px;
+    margin:10px ;
+}
+
+li{
+    text-align: left;
+    font-family: 'Franklin Gothic Medium';
+    border-radius: 15px;
+    padding: 5px;
+    margin:5px
+}
+footer{
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    font-size: smaller;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+}
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1 id="heading1">WELCOME TO THE PROJECT WEBSITE</h1>
+        <div class="navigation">
+        <nav>
+            <ul>
+                <li><a href="/Video_page" target="_blank">Open stream page</a></li>
+                <li><a href="/video_feed" target="_blank">Start Stream</a></li>
+                <li><a href="/data" target="_blank">Data</a></li>
+                <li><a href="/logout" target="_blank">Logout</a></li>
+            </ul>
+        </nav>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>WHAT IS THIS PROJECT ABOUT</h2>
+            <p>This is our website that leverages ai
+                technology to detect object in real time
+                This site features a live stream that identifies
+                and highlight objects,pushing the detection
+                to a firebase storage and analysis
+            </p>
+            <h2>Key Features:</h2>
+            <ul>
+                <li>Live Video stream:
+                    <p>Watch as our AI detects and 
+                     highlights objects in real-time 
+                     through a continuous video feed.</p>
+                </li>
+                <li>Historical data:
+                    <p>
+                        View a comprehensive log
+                        of detected object with time stamps
+                        and additional data stored in firebase
+                    </p>
+                </li>
+                <li>
+                    User Autntication:
+                    <P>
+                        Securely register and log in to
+                        access features 
+                    </P>
+                </li>
+                <li>
+                    Navigation:
+                    <p>Easily navigate between main page
+                        video stream,data logs and user authentifaction
+                    </p>
+                </li>
+            </ul>
+           
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 PROJECT WEBSITE</p>
+    </footer>
+</body>
+</html>
